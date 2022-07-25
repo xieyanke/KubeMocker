@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: xieyanke
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubemocker
+  namespace: xieyanke
+  labels:
+    app:  kubemocker
+spec:
+  selector:
+    matchLabels:
+      app: kubemocker
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kubemocker
+    spec:
+      containers:
+      - name: kubemocker
+        image:  xieyanke/kubemocker:v0.1.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort:  8080
+          protocol: TCP
+          name:  kubemocker
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubemocker
+  namespace: xieyanke
+spec:
+  selector:
+    app: kubemocker
+  type: NodePort
+  ports:
+  - name: kubemocker
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+    nodePort: 32767
+

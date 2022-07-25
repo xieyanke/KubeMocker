@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM busybox:latest 
 
 ADD ./bin/kubemocker /kubemocker
 
